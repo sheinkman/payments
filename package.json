@@ -7,6 +7,12 @@
     "start": "ts-node src/index.ts",
     "test": "jest"
   },
+  "config": {
+    "mongodbMemoryServer": {
+      "version": "8.6.1",
+      "debug": "1"
+    }
+  },
   "keywords": [],
   "author": "Uri Sheinkman",
   "license": "ISC",
@@ -26,7 +32,8 @@
     "express": "^4.18.1",
     "express-validator": "^6.14.1",
     "helmet": "^5.1.0",
-    "mongoose": "^6.4.0",
+    "lokijs": "^1.5.12",
+    "sqlite3": "^5.0.8",
     "ts-node": "^10.8.1"
   },
   "devDependencies": {
@@ -38,7 +45,6 @@
     "@types/jest": "^28.1.2",
     "@types/node": "^18.0.0",
     "jest": "^28.1.1",
-    "mongodb-memory-server": "^8.6.1",
     "ts-jest": "^28.0.5",
     "typescript": "^4.7.4"
   }

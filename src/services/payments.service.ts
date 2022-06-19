@@ -1,11 +1,11 @@
 import * as EmailValidator from 'email-validator';
-import {IPaymentRequest} from "../interfaces/IPayment";
+import {IPaymentRequest, IPaymentResponse} from "../interfaces/IPayment";
 import {getPaymentByReference, savePaymentByReference} from "../database/db";
 
 const CC = require('currency-converter-lt');
 
 export class PaymentsService {
-    async getPaymentByReference(reference: string): Promise<any>{
+    async getPaymentByReference(reference: string): Promise<IPaymentResponse|null>{
         const resp = await getPaymentByReference(reference);
         if(!!resp){
             const qualityCheck = resp.qualityCheck.split(', ').filter((str)=>{ return str&&str.length>0});
@@ -15,9 +15,26 @@ export class PaymentsService {
         return resp;
     }
 
-    async savePaymentByReference(payment: IPaymentRequest, qualityCheck: string): Promise<any>{
+    async savePaymentByReference(payment: IPaymentRequest, qualityCheck: string): Promise<IPaymentResponse>{
         const amountWithFees = this.calcFees(payment.amount);
-        const resp = await savePaymentByReference(payment, qualityCheck, amountWithFees);
+        payment.qualityCheck = qualityCheck;
+        payment.amountWithFees = amountWithFees;
+        payment.overPayment = amountWithFees < payment.amount;
+        payment.underPayment = amountWithFees > payment.amount;
+
+
+        const savedPayment = await savePaymentByReference(payment);
+        const resp:IPaymentResponse = {
+            amount: savedPayment.amount,
+            amountReceived: payment.amount_received,
+            amountWithFees: Number(payment.amountWithFees),
+            overPayment: payment.overPayment,
+            qualityCheck: payment.qualityCheck??'',
+            reference: payment.reference,
+            underPayment: payment.underPayment
+
+        };
+
         return resp;
     }
 
@@ -58,7 +75,7 @@ export class PaymentsService {
         return qualityCheck.join(', ');
     }
 
-    async handlePayment(payments: IPaymentRequest[]) {
+    async handlePayment(payments: IPaymentRequest[]): Promise<IPaymentResponse[]> {
         const resps = await Promise.all(payments.map(async (payment) => {
             let resp = await this.getPaymentByReference(payment.reference);
             if(!resp){

@@ -1,4 +1,6 @@
-FROM node:18-alpine
+FROM node:16
+
+RUN apt-get install libcurl4
 
 WORKDIR /usr/src/app
 
