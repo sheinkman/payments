@@ -16,7 +16,8 @@ export class PaymentsService {
     }
 
     async savePaymentByReference(payment: IPaymentRequest, qualityCheck: string): Promise<any>{
-        const resp = await savePaymentByReference(payment, qualityCheck);
+        const amountWithFees = this.calcFees(payment.amount);
+        const resp = await savePaymentByReference(payment, qualityCheck, amountWithFees);
         return resp;
     }
 
@@ -25,6 +26,16 @@ export class PaymentsService {
         const currencyConverter = new CC({from:currency, to:"USD", amount:1, isDecimalComma:true});
         const rate = await currencyConverter.from(currency.toUpperCase()).to("USD").amount(1).convert();
         return rate;
+    }
+
+    calcFees = (amount: number): number => {
+        if(amount <= 1000){
+            return amount * 1.05;
+        }
+        if(amount > 1000 && amount <= 10000){
+            return amount * 1.03;
+        }
+        return amount * 1.02;
     }
 
      getUsdAmount = async (amount: number, currency: string) => {

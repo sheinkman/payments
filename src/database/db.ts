@@ -2,7 +2,7 @@ import mongoose, {Schema} from 'mongoose';
 import {MongoMemoryServer} from 'mongodb-memory-server';
 import {IPaymentRequest, IPaymentResponse} from "../interfaces/IPayment";
 
-const PaymentSchema = new Schema({
+export const PaymentSchema = new Schema({
     reference: String,
     amount: Number,
     amount_received: Number,
@@ -58,18 +58,7 @@ export const getPaymentByReference = async (reference: string): Promise<IPayment
     return null;
 }
 
-const calcFees = (amount: number): number => {
-    if(amount <= 1000){
-        return amount * 1.05;
-    }
-    if(amount > 1000 && amount <= 10000){
-        return amount * 1.03;
-    }
-    return amount * 1.02;
-}
-
-export const savePaymentByReference = async (payment: IPaymentRequest, qualityCheck: string) => {
-    const amountWithFees = calcFees(payment.amount);
+export const savePaymentByReference = async (payment: IPaymentRequest, qualityCheck: string, amountWithFees: number) => {
 
     const newPayment:IPaymentResponse = {
         reference: payment.reference,
