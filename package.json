@@ -18,12 +18,12 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SimpleeOrg/BE-exercise-Uri-Sheinkman.git"
+    "url": "git+https://github.com/sheinkman/payments.git    "
   },
   "bugs": {
-    "url": "https://github.com/SimpleeOrg/BE-exercise-Uri-Sheinkman/issues"
+    "url": "https://github.com/sheinkman/payments.git/issues"
   },
-  "homepage": "https://github.com/SimpleeOrg/BE-exercise-Uri-Sheinkman#readme",
+  "homepage": "https://github.com/sheinkman/payments.git#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "currency-converter-lt": "^1.3.1",
