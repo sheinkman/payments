@@ -7,7 +7,7 @@ services:
         - /usr/src/app/node_modules
     command: npm run start
     ports:
-      - "9292:9292"
+      - "3100:3100"
     environment:
       NODE_ENV: development
       DEBUG: nodejs-docker-express:*

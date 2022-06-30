@@ -1,4 +1,4 @@
-import {IPaymentRequest, IPaymentResponse} from "../interfaces/IPayment";
+import {IBasic} from "../interfaces/IModels";
 
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
@@ -28,43 +28,28 @@ export const closeDb = async () => {
 }
 
 
-export const getPaymentByReference = async (reference: string): Promise<IPaymentResponse|null> => {
-    const resp: any = await query<IPaymentResponse>(`SELECT * FROM payments where reference = '${reference}'`);
+export const getPaymentByReference = async (reference: string): Promise<IBasic|null> => {
+    const resp: any = await query<IBasic>(`SELECT * FROM payments where reference = '${reference}'`);
 
     if(resp && resp.length > 0){
-        const newPayment:IPaymentResponse = {
-            reference: <string>resp[0].reference,
-            amount: Number(resp[0].amount),
-            amountWithFees: resp[0].amountWithFees,
-            amountReceived: resp[0].amount_received,
-            qualityCheck: <string>resp[0].qualityCheck,
-            overPayment: !!resp[0].overPayment,
-            underPayment: !!resp[0].underPayment,
+        const newModel:IBasic = {
+            id: 1,
+            sex: '1',
+            age: 1,
+            height: 1,
+            weight: 1
         }
-        return newPayment;
+        return newModel;
     }
     return null;
 }
 
-export const savePaymentByReference = async (payment: IPaymentRequest): Promise<IPaymentRequest> => {
+export const save = async (model: IBasic): Promise<IBasic> => {
 
 
-    await query(`INSERT INTO payments VALUES ("${payment.reference}",
-                                            "${payment.amount}",
-                                            "${payment.amount_received}",
-                                            "${payment.country_from}",
-                                            "${payment.sender_full_name}",
-                                            "${payment.sender_address}",
-                                            "${payment.school}",
-                                            "${payment.currency_from}",
-                                            "${payment.student_id}",
-                                            "${payment.email}",
-                                            "${payment.amountWithFees}",
-                                            "${payment.overPayment}",
-                                            "${payment.underPayment}",
-                                            "${payment.qualityCheck}")`, 'run');
+    await query(`INSERT INTO payments VALUES ("${model.id}",)`, 'run');
 
-    console.log("newPaymentnewPaymentnewPaymentnewPayment:", payment);
+    console.log(`save model: ${typeof model}`, model);
 
-    return payment;
+    return model;
 }

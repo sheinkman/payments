@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import {paymentsRouter} from "./controllers/payment-controller";
+import { mainRouter} from "./controllers/main-controller";
 import {initDb} from "./database/db";
 
 dotenv.config();
@@ -24,7 +24,8 @@ app.use(cors());
 // express parse requests as json
 app.use(express.json());
 
-app.use("/api/bookings", paymentsRouter);
+app.use("/pivot", mainRouter);
+
 
 // start server
 app.listen(process.env.PORT, () => {
