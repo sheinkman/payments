@@ -1,4 +1,4 @@
-import {PaymentsService} from "../src/services/payments.service";
+import {MainService} from "../src/services/payments.service";
 import {getPaymentByReference, savePaymentByReference} from "../src/database/db";
 import {IPaymentResponse} from "../src/interfaces/IPayment";
 
@@ -107,7 +107,7 @@ mockGetPaymentByReference
 const mockSavePaymentByReference = savePaymentByReference as jest.MockedFunction<typeof savePaymentByReference>;
 mockSavePaymentByReference.mockResolvedValue(savedNewPayment)
 
-const mockPaymentsService = new PaymentsService();
+const mockPaymentsService = new MainService();
 
 describe('payment service', () => {
     it('handlePayment new reference overPayment false underPayment true', async () => {
